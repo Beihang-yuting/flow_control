@@ -30,8 +30,8 @@ class scheduler;
         int best_id = -1;
         int best_pri = -1;
         foreach (queues[id]) begin
-            if (queues[id].has_packet() && queues[id].priority > best_pri) begin
-                best_pri = queues[id].priority;
+            if (queues[id].has_packet() && queues[id].prio > best_pri) begin
+                best_pri = queues[id].prio;
                 best_id  = id;
             end
         end
@@ -47,7 +47,7 @@ class scheduler;
         end
 
         attempts = 0;
-        while (attempts < wrr_queue_ids.size() * 2) begin
+        while (attempts < wrr_queue_ids.size() * 3) begin
             int qid;
             if (wrr_index >= wrr_queue_ids.size())
                 wrr_index = 0;
@@ -56,11 +56,14 @@ class scheduler;
             if (queues.exists(qid) && queues[qid].has_packet()) begin
                 if (!deficit_counter.exists(qid))
                     deficit_counter[qid] = 0;
-                deficit_counter[qid] += quantum * queues[qid].weight;
+
+                if (deficit_counter[qid] < queues[qid].peek_next_size())
+                    deficit_counter[qid] += quantum * queues[qid].weight;
 
                 if (deficit_counter[qid] >= queues[qid].peek_next_size()) begin
                     deficit_counter[qid] -= queues[qid].peek_next_size();
-                    wrr_index++;
+                    if (deficit_counter[qid] <= 0)
+                        wrr_index++;
                     return qid;
                 end
             end
@@ -76,8 +79,8 @@ class scheduler;
             int best_id = -1;
             int best_pri = 0;
             foreach (queues[id]) begin
-                if (queues[id].has_packet() && queues[id].priority > best_pri) begin
-                    best_pri = queues[id].priority;
+                if (queues[id].has_packet() && queues[id].prio > best_pri) begin
+                    best_pri = queues[id].prio;
                     best_id  = id;
                 end
             end
@@ -87,7 +90,7 @@ class scheduler;
         begin
             traffic_queue wrr_queues[int];
             foreach (queues[id]) begin
-                if (queues[id].priority == 0)
+                if (queues[id].prio == 0)
                     wrr_queues[id] = queues[id];
             end
             if (wrr_queues.size() > 0)

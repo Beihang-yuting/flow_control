@@ -104,7 +104,7 @@ program test_traffic_models;
             int num_samples;
 
             rm_rand.avg_rate_mbps = 1000.0;
-            rm_rand.dist          = DIST_UNIFORM;
+            rm_rand.dist_type     = DIST_UNIFORM;
             rm_rand.reset();
 
             gap = rm_rand.get_interval(1000, 0);
@@ -123,12 +123,12 @@ program test_traffic_models;
                       avg_gap_ns > 5600.0 && avg_gap_ns < 10400.0);
             end
 
-            rm_rand.dist = DIST_POISSON;
+            rm_rand.dist_type = DIST_POISSON;
             rm_rand.reset();
             gap = rm_rand.get_interval(1000, 0);
             check("random_poisson: gap > 0", gap > 0);
 
-            rm_rand.dist = DIST_NORMAL;
+            rm_rand.dist_type = DIST_NORMAL;
             rm_rand.reset();
             gap = rm_rand.get_interval(1000, 0);
             check("random_normal: gap > 0", gap > 0);

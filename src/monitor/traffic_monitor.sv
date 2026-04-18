@@ -148,7 +148,7 @@ class traffic_monitor;
             grand_total_bytes   += s.total_bytes;
             grand_total_packets += s.total_packets;
 
-            $display("%-6d| %7.1f Mbps| %7.1f Mbps| %+6.1f%%   | %7d | %10d | %d",
+            $display("%-6d| %7.1f Mbps| %7.1f Mbps| %6.1f%%   | %7d | %10d | %d",
                      qid,
                      s.configured_rate_mbps, s.actual_rate_mbps, s.deviation_pct,
                      s.total_packets, s.total_bytes, s.window_violations);

@@ -13,7 +13,7 @@ class traffic_queue;
 
     int                  queue_id;
     traffic_model_base   model;
-    int                  priority;
+    int                  prio;
     int                  weight;
 
     protected byte unsigned pkt_fifo[$][$];
@@ -21,7 +21,7 @@ class traffic_queue;
     function new(int id);
         this.queue_id = id;
         this.model    = null;
-        this.priority = 0;
+        this.prio     = 0;
         this.weight   = 1;
     endfunction
 

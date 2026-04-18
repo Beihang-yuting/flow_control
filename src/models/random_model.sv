@@ -7,13 +7,13 @@
 class random_model extends traffic_model_base;
 
     real           avg_rate_mbps;
-    distribution_e dist;
+    distribution_e dist_type;
 
     function new();
         super.new();
         this.model_type    = MODEL_RANDOM;
         this.avg_rate_mbps = 1000.0;
-        this.dist          = DIST_UNIFORM;
+        this.dist_type     = DIST_UNIFORM;
     endfunction
 
     protected function real exp_random(real lambda);
@@ -39,7 +39,7 @@ class random_model extends traffic_model_base;
         if (rate_bps <= 0) return 0;
         mean_gap_sec = (pkt_size * 8.0) / rate_bps;
 
-        case (dist)
+        case (dist_type)
             DIST_UNIFORM: begin
                 real min_gap, max_gap, u;
                 min_gap = mean_gap_sec * 0.5;
@@ -68,7 +68,7 @@ class random_model extends traffic_model_base;
     endfunction
 
     virtual function string to_string();
-        return $sformatf("random_model: avg_rate=%.1f Mbps, dist=%s", avg_rate_mbps, dist.name());
+        return $sformatf("random_model: avg_rate=%.1f Mbps, dist=%s", avg_rate_mbps, dist_type.name());
     endfunction
 
 endclass

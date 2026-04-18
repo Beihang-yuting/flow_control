@@ -99,9 +99,9 @@ class flow_controller;
             tbm.burst_size_bytes = burst_bytes;
     endfunction
 
-    function void set_queue_priority(int queue_id, int priority);
+    function void set_queue_priority(int queue_id, int prio);
         if (queues.exists(queue_id))
-            queues[queue_id].priority = priority;
+            queues[queue_id].prio = prio;
     endfunction
 
     function void set_queue_weight(int queue_id, int weight);
@@ -118,12 +118,12 @@ class flow_controller;
         end
     endfunction
 
-    function void set_random_param(int queue_id, real avg_rate, distribution_e dist);
+    function void set_random_param(int queue_id, real avg_rate, distribution_e dist_type);
         random_model rdm;
         if (!queues.exists(queue_id)) return;
         if ($cast(rdm, queues[queue_id].model)) begin
             rdm.avg_rate_mbps = avg_rate;
-            rdm.dist          = dist;
+            rdm.dist_type     = dist_type;
         end
     endfunction
 
